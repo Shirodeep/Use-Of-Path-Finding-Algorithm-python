@@ -145,7 +145,6 @@ def path_finding_function(draw, start, end, grid):
 
         if( current == end):
             while current in final_path_to_take:
-                print(current)
                 current = final_path_to_take[current]
                 current.bestPath()
                 start.makeStart()
@@ -212,7 +211,6 @@ def main(win, width):
                     if algorithm_started:
                         result = path_finding_function(lambda: draw(win, grid, ROWS, width), start, end, grid)
                         algorithm_started = False
-                        print(result) 
                 if event.key == pygame.K_s:
                     for row in grid:
                         for spot in row:
