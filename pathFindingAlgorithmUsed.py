@@ -1,10 +1,13 @@
 import pygame
 import queue
-import math
-WIDTH = 800
 
-WIN = pygame.display.set_mode((WIDTH, WIDTH))
+pygame.init()
+WIDTH = 700
+GameWidth = 900
+WIN = pygame.display.set_mode((GameWidth, GameWidth))
 pygame.display.set_caption("Practice project using path finding algorithm")
+newFont = pygame.font.Font('freesansbold.ttf', 12)
+
 
 AQUA = (0,255,255)           # for path finding animation
 BANANA = (227,207,87)        # for border of block block
@@ -95,7 +98,26 @@ def draw_grid(win, rows, width):
     for i in range(rows):
         pygame.draw.line(win, GRAY, (0, i * gap), (width, i * gap))
         for j in range(rows):
-            pygame.draw.line(win, GRAY, (j * gap, 0), (j * gap, width))            
+            pygame.draw.line(win, GRAY, (j * gap, 0), (j * gap, width))     
+    pygame.draw.line(win, GRAY, (width, 0), (width, width))
+    text = newFont.render('PRESS A TO RUN ALGORITHM', True, BANANA, DARKORCHID)
+    textRect = text.get_rect()
+    textRect.center = (800, 130)
+    win.blit(text, textRect)
+
+    text = newFont.render('PRESS S FOR RESET', True, BANANA, DARKORCHID)
+    textRect = text.get_rect()
+    textRect.center = (800, 100)
+    win.blit(text, textRect)
+
+    text1 = newFont.render('SHOWS THE START POINT', True, BANANA, DARKORCHID)
+    text2 = newFont.render('SHOWS THE END POINT', True, BANANA, DARKORCHID)
+    textRect1 = text1.get_rect()
+    textRect2 = text2.get_rect()
+    textRect1.center = (800, 150)
+    textRect2.center = (800, 180)
+    win.blit(text1, textRect1)
+    win.blit(text2, textRect2)
 
 def draw(win, grid, rows, width):
     win.fill(AZURE)
@@ -141,9 +163,9 @@ def path_finding_function(draw, start, end, grid):
             return "Place two position"
             
         current = checking_queue.get()[2]
-        # to_check_if_travelled.remove(current)
 
         if( current == end):
+            lista = []
             while current in final_path_to_take:
                 current = final_path_to_take[current]
                 current.bestPath()
@@ -184,43 +206,44 @@ def main(win, width):
                 run = False
             if pygame.mouse.get_pressed()[0]:
                 position = pygame.mouse.get_pos()
-                row, col = where_clicked(position, ROWS, width)
-                spot = grid[row][col]
-                if not start and spot != end:
-                    start = spot
-                    start.makeStart()
-                elif not end and spot != start:
-                    end = spot
-                    end.makeEnd()
-                elif spot != start and spot != end:
-                    spot.makeBlock()
+                if position[0] <= 700 and position[1] <= 700:
+                    row, col = where_clicked(position, ROWS, width)
+                    spot = grid[row][col]
+                    if not start and spot != end:
+                        start = spot
+                        start.makeStart()
+                    elif not end and spot != start:
+                        end = spot
+                        end.makeEnd()
+                    elif spot != start and spot != end:
+                        spot.makeBlock()
             elif pygame.mouse.get_pressed()[2]:
                 position = pygame.mouse.get_pos()
-                row, col = where_clicked(position, ROWS, width)
-                spot = grid[row][col]
-                spot.resetSpot()
-                if spot == start:
-                    start = None
-                elif spot == end:
-                    end = None
+                if position[0] <= 700 and position[1] <= 700:
+                    row, col = where_clicked(position, ROWS, width)
+                    spot = grid[row][col]
+                    spot.resetSpot()
+                    if spot == start:
+                        start = None
+                    elif spot == end:
+                        end = None
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     for rows in grid:
                         for spot in rows:
                             spot.travellerSpot(grid)
-                    if algorithm_started:
-                        result = path_finding_function(lambda: draw(win, grid, ROWS, width), start, end, grid)
-                        algorithm_started = False
+                    if start and end:
+                        if algorithm_started:
+                            result = path_finding_function(lambda: draw(win, grid, ROWS, width), start, end, grid)
+                            algorithm_started = False
                 if event.key == pygame.K_s:
                     for row in grid:
                         for spot in row:
                             spot.resetSpot()
-                            start = None
-                            end = None
                             pygame.display.update()
-                            algorithm_started = True
-                
-
+                    algorithm_started = True
+                    start = None
+                    end = None
     pygame.quit() 
 
 main(WIN, WIDTH)
