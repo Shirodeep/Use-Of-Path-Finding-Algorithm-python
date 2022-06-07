@@ -100,24 +100,29 @@ def draw_grid(win, rows, width):
         for j in range(rows):
             pygame.draw.line(win, GRAY, (j * gap, 0), (j * gap, width))     
     pygame.draw.line(win, GRAY, (width, 0), (width, width))
+    
     text = newFont.render('PRESS A TO RUN ALGORITHM', True, BANANA, DARKORCHID)
     textRect = text.get_rect()
-    textRect.center = (800, 130)
+    textRect.center = (800, 120)
     win.blit(text, textRect)
 
     text = newFont.render('PRESS S FOR RESET', True, BANANA, DARKORCHID)
     textRect = text.get_rect()
-    textRect.center = (800, 100)
+    textRect.center = (800, 90)
     win.blit(text, textRect)
-
-    text1 = newFont.render('SHOWS THE START POINT', True, BANANA, DARKORCHID)
-    text2 = newFont.render('SHOWS THE END POINT', True, BANANA, DARKORCHID)
+    forDARKORCHID = pygame.font.Font('freesansbold.ttf', 10)
+    text1 = forDARKORCHID.render('DARKORCHID SHOWS THE START POINT', True, BANANA, DARKORCHID)
+    text2 = newFont.render('BLUE SHOWS THE END POINT', True, BANANA, DARKORCHID)
+    text3 = newFont.render('GREEN SHOWS THE BEST PATH', True, BANANA, DARKORCHID)
     textRect1 = text1.get_rect()
     textRect2 = text2.get_rect()
+    textRect3 = text2.get_rect()
     textRect1.center = (800, 150)
     textRect2.center = (800, 180)
+    textRect3.center = (800, 210)
     win.blit(text1, textRect1)
     win.blit(text2, textRect2)
+    win.blit(text3, textRect3)
 
 def draw(win, grid, rows, width):
     win.fill(AZURE)
